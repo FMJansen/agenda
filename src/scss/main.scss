@@ -1,0 +1,104 @@
+$primary: #f18918;
+$meta: #888;
+$lowkey: #bbb;
+
+body {
+  font-family: 'Muli', Arial, sans-serif;
+  font-size: 20px;
+  margin: 0;
+}
+
+.meeting-meta {
+  color: $meta;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1em;
+
+  &__info {
+    padding: .8em 1em;
+  }
+}
+
+button {
+  align-self: center;
+  background: none;
+  border: 1px solid $lowkey;
+  border-radius: .3em;
+  color: $lowkey;
+  cursor: pointer;
+  font-family: 'Muli', sans-serif;
+  font-size: .8em;
+  padding: .8em 1em;
+  transition: all 200ms ease;
+
+  &:hover {
+    border-color: $primary;
+    color: $primary;
+  }
+}
+
+$editor: #fafafa;
+$editor-text: #383a42;
+
+.md-cont {
+  background: $editor;
+  bottom: 0;
+  box-sizing: border-box;
+  color: $editor-text;
+  font-family: 'Inconsolata', monospace;
+  font-size: 1em;
+  overflow: auto;
+  padding: 1em;
+  position: absolute;
+  top: 0;
+  transition: transform 400ms ease;
+  width: 100%;
+
+  &--closed {
+    transform: translateY(-150%);
+  }
+
+  &__editor {
+    margin: 1em;
+    white-space: pre-wrap;
+  }
+}
+
+.done {
+  margin-right: 3rem;
+  position: fixed;
+  right: 0;
+}
+
+.points-list {
+  bottom: 0;
+  overflow: auto;
+  position: absolute;
+  top: 4.8em;
+  width: 100vw;
+
+  > ol {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    width: auto;
+
+    > li {
+      flex-shrink: 0;
+      font-size: 5em;
+      font-weight: 900;
+      margin-left: 14vw;
+      padding: 7% 10vw 7% 0;
+      width: 76vw;
+    }
+
+    ul,
+    ol {
+      font-size: 2.2rem;
+      font-weight: 400;
+      line-height: 2;
+      margin: 1em 0;
+    }
+  }
+}

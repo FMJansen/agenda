@@ -1,0 +1,26 @@
+{
+  "name": "to-static",
+  "version": "0.1.0",
+  "description": "Generates static files from source",
+  "repository": "https://github.com/fmjansen/project-start",
+  "main": "gulpfile.js",
+  "README": "",
+  "license": "UNLICENSED",
+  "scripts": {
+    "test": "echo \"No test specified\" && exit 1"
+  },
+  "author": "Floris Jansen",
+  "dependencies": {
+    "fancy-log": "^1.3.2",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^6.0.0",
+    "gulp-cache": "^1.0.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-plumber": "^1.2.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.1",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify": "^3.0.1"
+  }
+}
