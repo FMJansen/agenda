@@ -56,7 +56,7 @@ window.onload = () => {
   }
 
   function mdToPoints() {
-    let md_content = editor.textContent,
+    let md_content = editor.value,
       html_content = markdown.toHTML(md_content);
     pointsList.innerHTML = html_content;
     let h1 = pointsList.querySelector('h1');

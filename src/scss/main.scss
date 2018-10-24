@@ -62,6 +62,12 @@ $editor-text: #383a42;
   &__editor {
     margin: 1em;
     white-space: pre-wrap;
+    width: 90%;
+    height: 90%;
+    background: none;
+    border: 0;
+    font-size: 1em;
+    font-family: monospace;
   }
 }
 
