@@ -13,7 +13,8 @@ deploy:
   skip_cleanup: true
   script: rsync -r -e 'ssh -p 4444' --quiet --exclude 'src' --exclude 'deploy_rsa.enc'
     --exclude 'README.md' --exclude 'package.json' --exclude 'gulpfile.js' --exclude
-    '.gitignore'  $TRAVIS_BUILD_DIR/ floris@fmjansen.com:/var/www/fmjansen/agenda/
+    '.gitignore' --exclude 'node_modules' --exclude 'package-lock.json'
+    $TRAVIS_BUILD_DIR/ floris@fmjansen.com:/var/www/fmjansen/agenda/
   on:
     branch: master
 addons:
