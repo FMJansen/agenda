@@ -16,7 +16,7 @@ deploy:
     '.gitignore' --exclude 'node_modules' --exclude 'package-lock.json'
     $TRAVIS_BUILD_DIR/ floris@fmjansen.com:/var/www/fmjansen/agenda/
   on:
-    branch: master
+    branch: main
 addons:
   ssh_known_hosts: fmjansen.com:4444
 before_deploy:
