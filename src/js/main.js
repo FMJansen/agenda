@@ -62,6 +62,11 @@ window.onload = () => {
     let h1 = pointsList.querySelector('h1');
     updateTitle(h1.textContent);
     h1.remove();
+    document.querySelectorAll('li').forEach((li) => {
+      li.innerHTML = li.innerHTML.replace("==", "<span class='highlight'>")
+        .replace("==", "</span>")
+        .replaceAll("&lt;-&gt;", "<br>&lt;-&gt;<br>");
+    })
     noPoints = pointsList.children[0].children.length;
     updatePoint();
   }
