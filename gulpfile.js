@@ -1,66 +1,128 @@
 // Include gulp
-var gulp = require('gulp');
+import gulp from 'gulp';
 
 // Include plugins
-var log = require('fancy-log');
+import log from 'fancy-log';
+import colors from 'ansi-colors';
 
-var concat = require('gulp-concat');
-var rename = require('gulp-rename');
+import concat from 'gulp-concat';
+import uglify from 'gulp-uglify';
+import rename from 'gulp-rename';
 
-var plumber = require('gulp-plumber');
-var sass = require('gulp-sass');
-var sourcemaps = require('gulp-sourcemaps');
-var prefix = require('gulp-autoprefixer');
+import plumber from 'gulp-plumber';
+import * as sass from 'sass';
+import gulpSass from 'gulp-sass';
+const usingSass = gulpSass(sass);
+import sourcemaps from 'gulp-sourcemaps';
+import prefix from 'gulp-autoprefixer';
 
-var imagemin = require('gulp-imagemin');
-var cache = require('gulp-cache');
+// Include browsersync
+import browserSyncImport from 'browser-sync'
+var browserSync = browserSyncImport.create();
 
 // Paths
 var src = 'src/';
 var dest = 'static/';
 
- // Concatenate & Minify JS
+
+
+// Concatenate & minify JS
 gulp.task('scripts', function() {
     return gulp.src(src + 'js/*.js')
         .pipe(plumber(function(error) {
-            log.error(error.message);
+            log(colors.red(error.message));
             this.emit('end');
         }))
-        .pipe(concat('main.js'))
-        .pipe(rename({suffix: '.min'}))
+        .pipe(concat('main.min.js'))
+        .pipe(uglify())
         .pipe(gulp.dest(dest + 'js'));
 });
 
-gulp.task('sass', function() {
-    return gulp.src(src + 'scss/*.scss')
+// Concatenate & sourcemap JS
+gulp.task('scriptsDev', function() {
+    return gulp.src(src + 'js/*.js')
         .pipe(plumber(function(error) {
-            log.error(error.message);
+            log(colors.red(error.message));
             this.emit('end');
         }))
         .pipe(sourcemaps.init())
-        .pipe(sass({style: 'compressed'}).on('error', sass.logError))
+        .pipe(concat('main.min.js'))
         .pipe(sourcemaps.write())
-        .pipe(prefix({browsers: ['last 2 version']}))
+        .pipe(gulp.dest(dest + 'js'));
+});
+
+
+
+// Process & compress SCSS
+gulp.task('sass', function() {
+    return gulp.src(src + 'scss/main.scss')
+        .pipe(plumber(function(error) {
+            log(colors.red(error.message));
+            this.emit('end');
+        }))
+        .pipe(usingSass({style: 'compressed'}).on('error', usingSass.logError))
+        .pipe(prefix())
+        .pipe(rename('main.css'))
         .pipe(gulp.dest(dest + 'css'));
 });
 
-gulp.task('images', function() {
-  return gulp.src(src + 'images/**/*')
-    .pipe(cache(imagemin({ optimizationLevel: 5, progressive: true, interlaced: true })))
-    .pipe(gulp.dest(dest + 'img'));
+// Process & sourcemap SCSS
+gulp.task('sassDev', function() {
+    return gulp.src(src + 'scss/main.scss')
+        .pipe(plumber(function(error) {
+            log(colors.red(error.message));
+            this.emit('end');
+        }))
+        .pipe(sourcemaps.init())
+        .pipe(usingSass().on('error', usingSass.logError))
+        .pipe(sourcemaps.write())
+        .pipe(rename('main.css'))
+        .pipe(gulp.dest(dest + 'css'))
+        .pipe(browserSync.stream());
 });
 
-gulp.task('watch', function() {
-   // Watch .js files
-  gulp.watch(src + 'js/*.js', ['scripts']);
-   // Watch .scss files
-  gulp.watch(src + 'scss/*.scss', ['sass']);
-   // Watch image files
-  gulp.watch(src + 'images/**/*', ['images']);
- });
+// Copy SCSS
+gulp.task('copy-scss', function() {
+    return gulp.src(src + 'scss/*.scss')
+        .pipe(gulp.dest(dest + 'css'));
+});
+
+// Copy fonts
+gulp.task('copy-fonts', function() {
+    return gulp.src(src + 'fonts/*', { encoding: false })
+        .pipe(gulp.dest(dest + 'fonts'));
+});
 
 
- // Default Task
-gulp.task('default', ['scripts', 'sass', 'images', 'watch']);
-// Build task
-gulp.task('build', ['scripts', 'sass', 'images']);
+
+// Static Server + watching scss/html/js files
+gulp.task('serve', function() {
+
+    browserSync.init({
+        files: ['_site/**'],
+        port: 3000,
+        server: {
+            index: 'index.html'
+        }
+    });
+
+    gulp.watch("src/scss/*.scss", gulp.series('sassDev'));
+    gulp.watch("*.html").on('change', browserSync.reload);
+    gulp.watch("*.md").on('change', browserSync.reload);
+    gulp.watch("src/js/*.js", gulp.series('scriptsDev'));
+});
+
+
+
+// Default task: serve with browserSync
+gulp.task('default',
+    gulp.series(
+        'serve',
+        gulp.parallel('sassDev', 'scriptsDev', 'copy-scss')
+    )
+);
+
+
+
+// Build task: everything minified only
+gulp.task('build', gulp.parallel('scripts', 'sass', 'copy-fonts'));
