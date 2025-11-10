@@ -1,9 +1,28 @@
 $primary: #f18918;
 $meta: #888;
 $lowkey: #bbb;
+$font: 'Inter', Arial, sans-serif;
+
+@font-face {
+  font-display: swap;
+  font-family: 'Inter';
+  src: local("Inter"),
+  url('../fonts/InterVariable.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'Inter';
+  src: local("Inter"),
+  url('../fonts/InterVariable-Italic.woff2') format('woff2');
+  font-weight: bold;
+  font-style: italic;
+}
 
 body {
-  font-family: 'Muli', Arial, sans-serif;
+  font-family: $font;
   font-size: 20px;
   margin: 0;
 }
@@ -27,7 +46,7 @@ button {
   border-radius: .3em;
   color: $lowkey;
   cursor: pointer;
-  font-family: 'Muli', sans-serif;
+  font-family: $font;
   font-size: .8em;
   padding: .8em 1em;
   transition: all 200ms ease;
@@ -46,7 +65,7 @@ $editor-text: #383a42;
   bottom: 0;
   box-sizing: border-box;
   color: $editor-text;
-  font-family: 'Inconsolata', monospace;
+  font-family: monospace;
   font-size: 1em;
   overflow: auto;
   padding: 1em;
